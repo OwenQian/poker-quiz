@@ -2,15 +2,6 @@
 
 An interactive web-based quiz to test your poker knowledge and skills. This comprehensive quiz covers poker math, betting strategy, ranges, position, exploits, and game theory.
 
-## Features
-
-- 30 carefully crafted questions covering all aspects of poker strategy
-- Point-based scoring system (100 points total)
-- Progress tracking and category-based score breakdown
-- Immediate feedback with detailed explanations
-- Mobile-responsive design
-- Dark theme for comfortable studying
-
 ## Live Demo
 
 Visit the live version at: https://owenqian.github.io/poker-quiz/
