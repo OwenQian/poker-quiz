@@ -353,7 +353,7 @@
             <div class="start-screen" id="startScreen">
                 <h2>Test Your Poker Knowledge</h2>
                 <p>This comprehensive quiz covers poker math, betting strategy, ranges, position, exploits, and game theory.</p>
-                <p>30 questions • 100 points total • ~15 minutes</p>
+                <p>32 questions • 102 points total • ~15 minutes</p>
                 <button class="btn btn-primary" onclick="startQuiz()">Start Quiz</button>
             </div>
 
@@ -390,11 +390,19 @@
 
     <script>
         const questions = [
-            // Part 1: Poker Math (20 points)
+            // Part 1: Poker Math (22 points)
+            {
+                category: "Poker Math",
+                question: "You have a flush draw on the flop. How many outs do you have?",
+                options: ["7 outs", "9 outs", "12 outs", "15 outs"],
+                correct: 1,
+                points: 1,
+                explanation: "A flush draw has 9 outs (13 cards in the suit minus the 4 you can see)"
+            },
             {
                 category: "Poker Math",
                 question: "You have a flush draw on the flop. How much equity do you have approximately?",
-                options: ["20%", "36%", "50%", "65%"],
+                options: ["32%", "36%", "39%", "42%"],
                 correct: 1,
                 points: 2,
                 explanation: "9 outs × 4 = 36% using the rule of 4"
@@ -428,24 +436,32 @@
                 question: "You have 87 vs AA on a K♠8♦3♣ flop. How many outs do you have?",
                 options: ["2 outs", "5 outs", "6 outs", "8 outs"],
                 correct: 1,
-                points: 3,
+                points: 2,
                 explanation: "2 eights for trips, 3 sevens for two pair = 2+3 = 5"
             },
             {
                 category: "Poker Math",
-                question: "Which factor does NOT significantly influence implied odds?",
-                options: ["Stack depth", "How disguised your draw is", "The current pot size", "Opponent's likely hand strength"],
-                correct: 2,
-                points: 4,
-                explanation: "Implied odds are about future money, not current pot"
+                question: "You have 87 vs AA on a K♠8♦3♣ flop with 5 outs. What is the rough probability that you will outdraw AA by the turn?",
+                options: ["8%", "10%", "12%", "15%"],
+                correct: 1,
+                points: 2,
+                explanation: "5 outs × 2 = 10% using the rule of 2 (probability of hitting by turn)"
             },
             {
                 category: "Poker Math",
-                question: "You have 7♠6♠ on A♠8♦4♣ facing a pot bet. You need 33% equity but only have 20%. Why might this still be a profitable call?",
-                options: ["The Rule of 2 and 4 is inaccurate", "Implied odds from stacking opponent when you hit", "You can bluff later streets", "Your equity is actually higher"],
+                question: "What are implied odds?",
+                options: ["The odds offered by the current pot size", "Your odds factoring in future bets that you can win if you hit your hand", "The mathematical probability of hitting your draw", "The odds of your opponent folding to a bet"],
+                correct: 1,
+                points: 4,
+                explanation: "Implied odds consider the additional money you can potentially win on future streets when you hit your hand"
+            },
+            {
+                category: "Poker Math",
+                question: "You have 7♠6♠ on A♠8♦4♣ facing a pot bet. You need 33% equity and you have 5 outs (4 gutshot outs + 1 extra out from backdoor flush draw). Using the rule of 4, this gives you 20% equity. Why might this still be a profitable call?",
+                options: ["The Rule of 2 and 4 is inaccurate", "Implied odds from stacking opponent when you hit", "Your opponent could be bluffing and you can win at showdown", "Your equity is actually higher"],
                 correct: 1,
                 points: 3,
-                explanation: "Implied odds from stacking opponent when you hit"
+                explanation: "Implied odds from stacking opponent when you hit your straight or flush"
             },
             
             // Part 2: Betting Reasons & Strategy (15 points)
@@ -578,10 +594,10 @@
             {
                 category: "Game Theory",
                 question: "What is 'alpha' in poker mathematics?",
-                options: ["Your win rate", "The risk-vs-reward ratio for the aggressor", "The optimal bluff frequency", "Both b and c when balanced"],
-                correct: 3,
+                options: ["Your win rate", "The risk-vs-reward ratio for the aggressor", "The defender's minimum calling frequency to defend against 0 equity bluffs", "The risk-vs-reward ratio for the defender"],
+                correct: 1,
                 points: 2,
-                explanation: "Both b and c when balanced"
+                explanation: "Alpha is the risk-vs-reward ratio for the aggressor (bet size / (pot + bet size)). Beta is the defender's pot odds."
             },
             {
                 category: "Game Theory",
@@ -593,11 +609,11 @@
             },
             {
                 category: "Game Theory",
-                question: "When betting 2/3 pot on the river, how many bluffs should you have for 1 combo of value?",
-                options: ["25%", "28%", "33%", "40%"],
-                correct: 3,
+                question: "When betting 2/3 pot on the river, how many bluff combos per every value combo should you have?",
+                options: ["2/7", "2/5", "1/3", "2/3"],
+                correct: 1,
                 points: 4,
-                explanation: "2/5 = 40%. Your bluff to value ratio is 2/5 (equal to alpha), but the bluff proportion is 2/7 = 28% (beta = opponent's pot odds)"
+                explanation: "Alpha = 2/5 (bet size / (pot + bet size) = (2/3) / (1 + 2/3) = 2/5). Your bluff to value ratio equals alpha, so 2/5 bluff combos per value combo."
             },
             
             // Part 6: Applied Concepts (20 points)
@@ -762,8 +778,8 @@
             document.getElementById('questionSection').style.display = 'none';
             document.getElementById('resultScreen').style.display = 'block';
             
-            const percentage = Math.round((score / 100) * 100);
-            document.getElementById('scoreDisplay').textContent = `${score} / 100 (${percentage}%)`;
+            const percentage = Math.round((score / 102) * 100);
+            document.getElementById('scoreDisplay').textContent = `${score} / 102 (${percentage}%)`;
             
             let gradeText, gradeClass;
             if (score >= 90) {
@@ -789,7 +805,7 @@
             
             // Category breakdown
             const categories = {
-                "Poker Math": 20,
+                "Poker Math": 22,
                 "Betting Strategy": 15,
                 "Ranges & Position": 15,
                 "Balance & Exploits": 20,

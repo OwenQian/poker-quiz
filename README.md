@@ -8,7 +8,7 @@ Visit the live version at: https://owenqian.github.io/poker-quiz/
 
 ## Topics Covered
 
-1. **Poker Math** (20 points) - Pot odds, equity calculations, outs, implied odds
+1. **Poker Math** (22 points) - Pot odds, equity calculations, outs, implied odds
 2. **Betting Strategy** (15 points) - Value betting, bluffing, bet sizing
 3. **Ranges & Position** (15 points) - Opening ranges, positional play, range construction
 4. **Balance & Exploits** (20 points) - Player types, adjustments, exploit strategies
@@ -17,11 +17,11 @@ Visit the live version at: https://owenqian.github.io/poker-quiz/
 
 ## Scoring Guide
 
-- **90-100 points**: Advanced Understanding - Ready for high-stakes games!
-- **75-89 points**: Solid Grasp - Strong intermediate player
-- **60-74 points**: Good Foundation - Keep studying and practicing
-- **45-59 points**: Understanding Basics - Focus on fundamentals
-- **Below 45**: Review the guide thoroughly before playing serious poker
+- **92-102 points**: Advanced Understanding - Ready for high-stakes games!
+- **77-91 points**: Solid Grasp - Strong intermediate player
+- **61-76 points**: Good Foundation - Keep studying and practicing
+- **46-60 points**: Understanding Basics - Focus on fundamentals
+- **Below 46**: Review the guide thoroughly before playing serious poker
 
 ## Local Development
 
