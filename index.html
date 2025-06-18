@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poker Strategy Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f1419;
+            color: #e7e9ea;
+            line-height: 1.4;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            height: 95vh;
+            background: #1a1f2e;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar {
+            background: rgba(255, 255, 255, 0.2);
+            height: 6px;
+            border-radius: 3px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #4ade80;
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .quiz-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .start-screen, .result-screen {
+            text-align: center;
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .start-screen h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #a78bfa;
+        }
+
+        .start-screen p {
+            font-size: 1em;
+            margin-bottom: 20px;
+            color: #94a3b8;
+        }
+
+        .question-section {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .question-number {
+            font-size: 1.2em;
+            color: #a78bfa;
+            font-weight: 600;
+        }
+
+        .points {
+            background: rgba(167, 139, 250, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .category {
+            background: rgba(100, 126, 234, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            color: #94a3b8;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .option {
+            background: #2d3748;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option:hover {
+            background: #374151;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .option.correct {
+            border-color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+        }
+
+        .option.incorrect {
+            border-color: #f87171;
+            background: rgba(248, 113, 113, 0.1);
+        }
+
+        .option.disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .option-label {
+            font-weight: 600;
+            color: #a78bfa;
+            margin-right: 10px;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 12px;
+            border-radius: 6px;
+            display: none;
+            font-size: 0.85em;
+            height: 50px;
+            overflow-y: auto;
+        }
+
+        .feedback.correct {
+            background: rgba(74, 222, 128, 0.1);
+            border: 1px solid #4ade80;
+            color: #4ade80;
+        }
+
+        .feedback.incorrect {
+            background: rgba(248, 113, 113, 0.1);
+            border: 1px solid #f87171;
+            color: #f87171;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #374151;
+            color: #e7e9ea;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-screen h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+            color: #a78bfa;
+        }
+
+        .score-display {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin: 15px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .score-breakdown {
+            background: #2d3748;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 12px 0;
+            text-align: left;
+            font-size: 0.85em;
+            overflow-y: auto;
+            max-height: 160px;
+        }
+
+        .score-category {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #374151;
+        }
+
+        .score-category:last-child {
+            border-bottom: none;
+        }
+
+        .grade {
+            font-size: 1.2em;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .grade.excellent {
+            background: rgba(74, 222, 128, 0.1);
+            color: #4ade80;
+            border: 1px solid #4ade80;
+        }
+
+        .grade.good {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            border: 1px solid #3b82f6;
+        }
+
+        .grade.fair {
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+            border: 1px solid #fbbf24;
+        }
+
+        .grade.poor {
+            background: rgba(248, 113, 113, 0.1);
+            color: #f87171;
+            border: 1px solid #f87171;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .quiz-container {
+                padding: 20px;
+            }
+            
+            .question-text {
+                font-size: 1.1em;
+            }
+            
+            .option {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Poker Strategy Quiz</h1>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <div class="quiz-container">
+            <div class="start-screen" id="startScreen">
+                <h2>Test Your Poker Knowledge</h2>
+                <p>This comprehensive quiz covers poker math, betting strategy, ranges, position, exploits, and game theory.</p>
+                <p>30 questions • 100 points total • ~15 minutes</p>
+                <button class="btn btn-primary" onclick="startQuiz()">Start Quiz</button>
+            </div>
+
+            <div class="question-section" id="questionSection">
+                <div class="question-header">
+                    <span class="question-number" id="questionNumber"></span>
+                    <span class="category" id="category"></span>
+                    <span class="points" id="points"></span>
+                </div>
+                
+                <div class="question-text" id="questionText"></div>
+                
+                <div class="options" id="optionsContainer"></div>
+                
+                <div class="feedback" id="feedback"></div>
+                
+                <div class="buttons">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">Previous</button>
+                    <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
+                </div>
+            </div>
+
+            <div class="result-screen" id="resultScreen" style="display: none;">
+                <h2>Quiz Complete!</h2>
+                <div class="score-display" id="scoreDisplay"></div>
+                <div class="grade" id="gradeDisplay"></div>
+                
+                <div class="score-breakdown" id="scoreBreakdown"></div>
+                
+                <button class="btn btn-primary" onclick="restartQuiz()">Retake Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Part 1: Poker Math (20 points)
+            {
+                category: "Poker Math",
+                question: "You have a flush draw on the flop. How much equity do you have approximately?",
+                options: ["20%", "36%", "50%", "65%"],
+                correct: 1,
+                points: 2,
+                explanation: "9 outs × 4 = 36% using the rule of 4"
+            },
+            {
+                category: "Poker Math",
+                question: "The pot is $150 and your opponent bets $75. What are your pot odds?",
+                options: ["20%", "25%", "33%", "50%"],
+                correct: 1,
+                points: 3,
+                explanation: "75/(150+75) = 75/225 = 25%"
+            },
+            {
+                category: "Poker Math",
+                question: "Using the fraction formula, if you face a 3/4 pot bet, what are your pot odds?",
+                options: ["3/7", "3/9", "3/10", "3/11"],
+                correct: 2,
+                points: 3,
+                explanation: "Using formula 3/(6+4) = 3/10"
+            },
+            {
+                category: "Poker Math",
+                question: "You're getting 4:1 pot odds. What's the minimum equity you need to make a profitable call?",
+                options: ["20%", "25%", "33%", "50%"],
+                correct: 0,
+                points: 2,
+                explanation: "4:1 means calling 1 to win 4, so 1/5 = 20%"
+            },
+            {
+                category: "Poker Math",
+                question: "You have 87 vs AA on a K♠8♦3♣ flop. How many outs do you have?",
+                options: ["2 outs", "5 outs", "6 outs", "8 outs"],
+                correct: 1,
+                points: 3,
+                explanation: "2 eights for trips, 3 sevens for two pair = 2+3 = 5"
+            },
+            {
+                category: "Poker Math",
+                question: "Which factor does NOT significantly influence implied odds?",
+                options: ["Stack depth", "How disguised your draw is", "The current pot size", "Opponent's likely hand strength"],
+                correct: 2,
+                points: 4,
+                explanation: "Implied odds are about future money, not current pot"
+            },
+            {
+                category: "Poker Math",
+                question: "You have 7♠6♠ on A♠8♦4♣ facing a pot bet. You need 33% equity but only have 20%. Why might this still be a profitable call?",
+                options: ["The Rule of 2 and 4 is inaccurate", "Implied odds from stacking opponent when you hit", "You can bluff later streets", "Your equity is actually higher"],
+                correct: 1,
+                points: 3,
+                explanation: "Implied odds from stacking opponent when you hit"
+            },
+            
+            // Part 2: Betting Reasons & Strategy (15 points)
+            {
+                category: "Betting Strategy",
+                question: "Which is NOT one of the three primary reasons to bet?",
+                options: ["Get worse hands to call", "Get better hands to fold", "Show strength to opponents", "Charge hands to see the next card"],
+                correct: 2,
+                points: 3,
+                explanation: "Show strength to opponents"
+            },
+            {
+                category: "Betting Strategy",
+                question: "You have KQ on A♠7♦3♣ rainbow. Why is betting often a mistake here?",
+                options: ["KQ is too weak to bet", "You only fold out worse hands and get called by better", "The board is too dry", "You should always check in position"],
+                correct: 1,
+                points: 3,
+                explanation: "You only fold out worse hands and get called by better"
+            },
+            {
+                category: "Betting Strategy",
+                question: "On A♠7♦3♣, you have 7♣6♣. KQ has how many outs against you?",
+                options: ["3 outs", "6 outs", "9 outs", "12 outs"],
+                correct: 1,
+                points: 3,
+                explanation: "6 outs (3 Kings + 3 Queens)"
+            },
+            {
+                category: "Betting Strategy",
+                question: "Which is the BEST reason to check a strong hand like KK on K-7-2 rainbow?",
+                options: ["To pot control", "To trap aggressive opponents and induce bluffs", "To see a safe turn card", "To avoid getting raised"],
+                correct: 1,
+                points: 3,
+                explanation: "To trap aggressive opponents and induce bluffs"
+            },
+            {
+                category: "Betting Strategy",
+                question: "On 9♠8♠7♦, why might checking AA be correct?",
+                options: ["AA is not strong enough to bet", "To trap with a strong hand", "Many turn cards drastically change hand strength", "To induce bluffs"],
+                correct: 2,
+                points: 3,
+                explanation: "Many turn cards drastically change hand strength"
+            },
+            
+            // Part 3: Ranges & Position (15 points)
+            {
+                category: "Ranges & Position",
+                question: "What makes a hand fall into Category 3 (Bluffing Candidates)?",
+                options: ["It's currently ahead but vulnerable", "It has showdown value", "It's weak but has draw equity or blockers", "It can bet multiple streets for value"],
+                correct: 2,
+                points: 3,
+                explanation: "It's weak but has draw equity or blockers"
+            },
+            {
+                category: "Ranges & Position",
+                question: "What percentage of hands should you typically open from UTG in 6-max?",
+                options: ["5%", "15%", "25%", "35%"],
+                correct: 1,
+                points: 3,
+                explanation: "15%"
+            },
+            {
+                category: "Ranges & Position",
+                question: "What's the fundamental difference between checking IP vs OOP?",
+                options: ["IP checks are weaker than OOP checks", "IP immediately sees the next card; OOP gives information without gaining any", "OOP checks are always traps", "There is no significant difference"],
+                correct: 1,
+                points: 3,
+                explanation: "IP immediately sees the next card; OOP gives information without gaining any"
+            },
+            {
+                category: "Ranges & Position",
+                question: "Why must you sometimes check strong hands OOP?",
+                options: ["To control pot size", "To see safe cards", "To protect your checking range from exploitation", "Strong hands should always bet OOP"],
+                correct: 2,
+                points: 3,
+                explanation: "To protect your checking range from exploitation"
+            },
+            {
+                category: "Ranges & Position",
+                question: "Which statement about position is FALSE?",
+                options: ["Position helps you realize equity better", "Position gives you information advantage", "Position allows wider preflop ranges", "Position eliminates the need for bluffing"],
+                correct: 3,
+                points: 3,
+                explanation: "Position eliminates the need for bluffing"
+            },
+            
+            // Part 4: Balance & Exploits (20 points)
+            {
+                category: "Balance & Exploits",
+                question: "You notice an opponent only shows down premium hands and folds to most aggression. This player type is:",
+                options: ["LAG (Loose Aggressive)", "Nit", "Calling Station", "Maniac"],
+                correct: 1,
+                points: 4,
+                explanation: "Nit"
+            },
+            {
+                category: "Balance & Exploits",
+                question: "Against a calling station, which adjustment is MOST profitable?",
+                options: ["Bluff more frequently", "Never value bet marginal hands", "Value bet relentlessly, even thin", "Check-raise bluff more often"],
+                correct: 2,
+                points: 4,
+                explanation: "Value bet relentlessly, even thin"
+            },
+            {
+                category: "Balance & Exploits",
+                question: "You notice a player is betting huge with weak hands and playing >50% of hands. How should you adjust?",
+                options: ["Play more hands to match their aggression", "Tighten up and pick hands to call down with", "Start 3-betting light preflop", "Fold to their aggression"],
+                correct: 1,
+                points: 4,
+                explanation: "Tighten up and pick hands to call down with"
+            },
+            {
+                category: "Balance & Exploits",
+                question: "Against a 'Fit or Fold' player who folds to most c-bets, the best adjustment is:",
+                options: ["Only c-bet with strong hands", "Increase c-bet frequency and consider smaller sizing", "Check more often to induce bluffs", "Bet larger to maximize value"],
+                correct: 1,
+                points: 4,
+                explanation: "Increase c-bet frequency and consider smaller sizing"
+            },
+            {
+                category: "Balance & Exploits",
+                question: "What's the most reliable source of information for identifying player types?",
+                options: ["Their bet sizing patterns", "How often they bet or check", "Watching showdowns", "Their preflop VPIP percentage"],
+                correct: 2,
+                points: 4,
+                explanation: "Watching showdowns"
+            },
+            
+            // Part 5: Game Theory & Indifference - Advanced (10 points)
+            {
+                category: "Game Theory",
+                question: "What is 'alpha' in poker mathematics?",
+                options: ["Your win rate", "The risk-vs-reward ratio for the aggressor", "The optimal bluff frequency", "Both b and c when balanced"],
+                correct: 3,
+                points: 2,
+                explanation: "Both b and c when balanced"
+            },
+            {
+                category: "Game Theory",
+                question: "You bet $100 into a $100 pot. What's your alpha?",
+                options: ["33%", "40%", "50%", "67%"],
+                correct: 2,
+                points: 4,
+                explanation: "50% (100/(100+100) = 50%)"
+            },
+            {
+                category: "Game Theory",
+                question: "When betting 2/3 pot on the river, how many bluffs should you have for 1 combo of value?",
+                options: ["25%", "28%", "33%", "40%"],
+                correct: 3,
+                points: 4,
+                explanation: "2/5 = 40%. Your bluff to value ratio is 2/5 (equal to alpha), but the bluff proportion is 2/7 = 28% (beta = opponent's pot odds)"
+            },
+            
+            // Part 6: Applied Concepts (20 points)
+            {
+                category: "Applied Concepts",
+                question: "You have J♥T♥ on K♠9♣8♦. According to the four categories framework, your hand is:",
+                options: ["Category 1 - Value", "Category 2 - Showdown value", "Category 3 - Bluffing candidate", "Category 4 - Weak hand"],
+                correct: 2,
+                points: 4,
+                explanation: "Category 3 - Bluffing candidate"
+            },
+            {
+                category: "Applied Concepts",
+                question: "You have K♠Q♦ on A♠7♦3♣ rainbow. Based on the 'Strength Trap' concept, what should you do?",
+                options: ["Bet for value since you have a strong hand", "Check because betting folds worse and only gets called by better", "Bet small to induce calls", "Check-raise as a bluff"],
+                correct: 1,
+                points: 4,
+                explanation: "Check because betting folds worse and only gets called by better"
+            },
+            {
+                category: "Applied Concepts",
+                question: "You have A♠K♦ on K♣7♦2♠ rainbow. The pot is $100 and you're in position. According to the four categories framework, your hand is:",
+                options: ["Category 1 - Value", "Category 2 - Showdown value", "Category 3 - Bluffing candidate", "Category 4 - Weak hand"],
+                correct: 0,
+                points: 4,
+                explanation: "Category 1 - Value"
+            },
+            {
+                category: "Applied Concepts",
+                question: "You're in the SB with 9♠8♠ facing a BTN open. The flop comes A♥K♣5♦. Your hand is best classified as:",
+                options: ["Category 1 - Value", "Category 2 - Showdown value", "Category 3 - Bluffing candidate", "Category 4 - Weak hand"],
+                correct: 3,
+                points: 4,
+                explanation: "Category 4 - Weak hand"
+            },
+            {
+                category: "Applied Concepts",
+                question: "You have Q♦Q♣ on A♠8♥3♣ after betting preflop and getting called. You're out of position. Your hand is best classified as:",
+                options: ["Category 1 - Value", "Category 2 - Showdown value", "Category 3 - Bluffing candidate", "Category 4 - Weak hand"],
+                correct: 1,
+                points: 4,
+                explanation: "Category 2 - Showdown value"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+        let categoryScores = {};
+
+        function startQuiz() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('questionSection').style.display = 'block';
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            const q = questions[currentQuestion];
+            document.getElementById('questionNumber').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            document.getElementById('category').textContent = q.category;
+            document.getElementById('points').textContent = `${q.points} points`;
+            document.getElementById('questionText').textContent = q.question;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.innerHTML = `<span class="option-label">${String.fromCharCode(65 + index)})</span> ${option}`;
+                optionDiv.onclick = () => selectOption(index);
+                
+                if (userAnswers[currentQuestion] !== undefined) {
+                    optionDiv.classList.add('disabled');
+                    if (index === userAnswers[currentQuestion]) {
+                        optionDiv.classList.add(index === q.correct ? 'correct' : 'incorrect');
+                    } else if (index === q.correct) {
+                        optionDiv.classList.add('correct');
+                    }
+                }
+                
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            updateProgress();
+            updateButtons();
+            
+            if (userAnswers[currentQuestion] !== undefined) {
+                showFeedback(userAnswers[currentQuestion] === q.correct);
+            }
+        }
+
+        function selectOption(index) {
+            if (userAnswers[currentQuestion] !== undefined) return;
+            
+            userAnswers[currentQuestion] = index;
+            const q = questions[currentQuestion];
+            const correct = index === q.correct;
+            
+            if (correct) {
+                score += q.points;
+                categoryScores[q.category] = (categoryScores[q.category] || 0) + q.points;
+            }
+            
+            const options = document.querySelectorAll('.option');
+            options.forEach((opt, i) => {
+                opt.classList.add('disabled');
+                if (i === index) {
+                    opt.classList.add(correct ? 'correct' : 'incorrect');
+                } else if (i === q.correct) {
+                    opt.classList.add('correct');
+                }
+            });
+            
+            showFeedback(correct);
+            updateButtons();
+        }
+
+        function showFeedback(correct) {
+            const feedback = document.getElementById('feedback');
+            const q = questions[currentQuestion];
+            feedback.className = `feedback ${correct ? 'correct' : 'incorrect'}`;
+            feedback.innerHTML = `<strong>${correct ? 'Correct!' : 'Incorrect.'}</strong> ${q.explanation}`;
+            feedback.style.display = 'block';
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function updateButtons() {
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').disabled = userAnswers[currentQuestion] === undefined;
+            
+            if (currentQuestion === questions.length - 1) {
+                document.getElementById('nextBtn').textContent = 'Finish';
+            } else {
+                document.getElementById('nextBtn').textContent = 'Next';
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                document.getElementById('feedback').style.display = 'none';
+                displayQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                document.getElementById('feedback').style.display = 'none';
+                displayQuestion();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('questionSection').style.display = 'none';
+            document.getElementById('resultScreen').style.display = 'block';
+            
+            const percentage = Math.round((score / 100) * 100);
+            document.getElementById('scoreDisplay').textContent = `${score} / 100 (${percentage}%)`;
+            
+            let gradeText, gradeClass;
+            if (score >= 90) {
+                gradeText = "Advanced Understanding - Ready for high-stakes games!";
+                gradeClass = "excellent";
+            } else if (score >= 75) {
+                gradeText = "Solid Grasp - Strong intermediate player";
+                gradeClass = "good";
+            } else if (score >= 60) {
+                gradeText = "Good Foundation - Keep studying and practicing";
+                gradeClass = "fair";
+            } else if (score >= 45) {
+                gradeText = "Understanding Basics - Focus on fundamentals";
+                gradeClass = "fair";
+            } else {
+                gradeText = "Review the guide thoroughly before playing serious poker";
+                gradeClass = "poor";
+            }
+            
+            const gradeDiv = document.getElementById('gradeDisplay');
+            gradeDiv.textContent = gradeText;
+            gradeDiv.className = `grade ${gradeClass}`;
+            
+            // Category breakdown
+            const categories = {
+                "Poker Math": 20,
+                "Betting Strategy": 15,
+                "Ranges & Position": 15,
+                "Balance & Exploits": 20,
+                "Game Theory": 10,
+                "Applied Concepts": 20
+            };
+            
+            let breakdownHTML = '<h3>Score by Category:</h3>';
+            for (const [cat, maxPoints] of Object.entries(categories)) {
+                const earned = categoryScores[cat] || 0;
+                const percentage = Math.round((earned / maxPoints) * 100);
+                breakdownHTML += `
+                    <div class="score-category">
+                        <span>${cat}</span>
+                        <span>${earned}/${maxPoints} (${percentage}%)</span>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('scoreBreakdown').innerHTML = breakdownHTML;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+            categoryScores = {};
+            document.getElementById('resultScreen').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'block';
+            document.getElementById('progressFill').style.width = '0%';
+        }
+    </script>
+</body>
+</html>
