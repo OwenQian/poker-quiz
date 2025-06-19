@@ -9,6 +9,13 @@ function startQuiz() {
     displayQuestion();
 }
 
+function updateQuizInfo() {
+    const questionCount = questions.length;
+    const totalPoints = questions.reduce((sum, question) => sum + question.points, 0);
+    document.getElementById('questionCount').textContent = questionCount;
+    document.getElementById('totalPoints').textContent = totalPoints;
+}
+
 function displayQuestion() {
     const q = questions[currentQuestion];
     document.getElementById('questionNumber').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
@@ -117,40 +124,47 @@ function showResults() {
     document.getElementById('questionSection').style.display = 'none';
     document.getElementById('resultScreen').style.display = 'block';
     
-    const percentage = Math.round((score / 110) * 100);
-    document.getElementById('scoreDisplay').textContent = `${score} / 110 (${percentage}%)`;
+    // Calculate total possible points dynamically
+    const totalPoints = questions.reduce((sum, question) => sum + question.points, 0);
+    const percentage = Math.round((score / totalPoints) * 100);
+    document.getElementById('scoreDisplay').textContent = `${score} / ${totalPoints} (${percentage}%)`;
     
-    let gradeText, gradeClass;
-    if (score >= 90) {
-        gradeText = "Advanced Understanding - Ready for high-stakes games!";
+    // US Letter Grading System
+    let letterGrade, gradeText, gradeClass;
+    if (percentage >= 90) {
+        letterGrade = "A";
+        gradeText = "Excellent - Advanced Understanding";
         gradeClass = "excellent";
-    } else if (score >= 75) {
-        gradeText = "Solid Grasp - Strong intermediate player";
+    } else if (percentage >= 80) {
+        letterGrade = "B";
+        gradeText = "Good - Solid Intermediate Knowledge";
         gradeClass = "good";
-    } else if (score >= 60) {
-        gradeText = "Good Foundation - Keep studying and practicing";
+    } else if (percentage >= 70) {
+        letterGrade = "C";
+        gradeText = "Satisfactory - Basic Understanding";
         gradeClass = "fair";
-    } else if (score >= 45) {
-        gradeText = "Understanding Basics - Focus on fundamentals";
-        gradeClass = "fair";
+    } else if (percentage >= 60) {
+        letterGrade = "D";
+        gradeText = "Below Average - Needs Improvement";
+        gradeClass = "poor";
     } else {
-        gradeText = "Review the guide thoroughly before playing serious poker";
+        letterGrade = "F";
+        gradeText = "Failing - Requires Significant Study";
         gradeClass = "poor";
     }
     
     const gradeDiv = document.getElementById('gradeDisplay');
-    gradeDiv.textContent = gradeText;
+    gradeDiv.innerHTML = `<div class="letter-grade">${letterGrade}</div><div class="grade-description">${gradeText}</div>`;
     gradeDiv.className = `grade ${gradeClass}`;
     
-    // Category breakdown
-    const categories = {
-        "Poker Math": 25,
-        "Betting Strategy": 18,
-        "Ranges & Categories": 20,
-        "Position": 12,
-        "Balance & Exploits": 20,
-        "Game Theory": 15
-    };
+    // Calculate category maximums dynamically
+    const categories = {};
+    questions.forEach(question => {
+        if (!categories[question.category]) {
+            categories[question.category] = 0;
+        }
+        categories[question.category] += question.points;
+    });
     
     let breakdownHTML = '<h3>Score by Category:</h3>';
     for (const [cat, maxPoints] of Object.entries(categories)) {
@@ -168,11 +182,41 @@ function showResults() {
 }
 
 function restartQuiz() {
+    // Reset all quiz state
     currentQuestion = 0;
     score = 0;
     userAnswers = [];
     categoryScores = {};
+    
+    // Hide result screen and show start screen
     document.getElementById('resultScreen').style.display = 'none';
     document.getElementById('startScreen').style.display = 'block';
+    document.getElementById('questionSection').style.display = 'none';
+    
+    // Reset progress bar
     document.getElementById('progressFill').style.width = '0%';
+    
+    // Clear any feedback that might be showing
+    document.getElementById('feedback').style.display = 'none';
+    document.getElementById('feedback').innerHTML = '';
+    
+    // Reset question display elements
+    document.getElementById('questionNumber').textContent = '';
+    document.getElementById('category').textContent = '';
+    document.getElementById('points').textContent = '';
+    document.getElementById('questionText').textContent = '';
+    document.getElementById('optionsContainer').innerHTML = '';
+    
+    // Reset buttons
+    document.getElementById('prevBtn').disabled = true;
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('nextBtn').textContent = 'Next';
+    
+    // Update quiz info
+    updateQuizInfo();
 }
+
+// Initialize quiz info when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    updateQuizInfo();
+});
