@@ -276,11 +276,11 @@ const questions = [
     },
     {
         category: "Game Theory",
-        question: "When your bluff percentage equals alpha, what happens to your opponent?",
+        question: "When your bluff to value ratio equals alpha, what happens to your opponent's bluff catchers?",
         options: ["They must fold", "They become indifferent between calling and folding", "They must call", "They get confused"],
         correct: 1,
         points: 4,
-        explanation: "When bluff % = alpha, opponent's EV for calling and folding becomes identical (indifferent)"
+        explanation: "A bluff to value ratio of alpha makes your opponent's call-EV equal to fold-EV (indifferent)"
     },
     {
         category: "Game Theory",
@@ -292,10 +292,10 @@ const questions = [
     },
     {
         category: "Game Theory",
-        question: "What's the relationship between bet size and required bluff frequency?",
+        question: "What's the relationship between bet size and the balanced bluff-to-value ratio?",
         options: ["Larger bets need fewer bluffs", "No relationship", "Larger bets need more bluffs", "Only pot-sized bets work"],
         correct: 2,
         points: 2,
-        explanation: "Larger bets have higher alpha, requiring more bluffs to achieve indifference (e.g., 2x pot = 67% bluffs needed). In other words larger bets allow you to include more bluffs as part of a balanced range."
+        explanation: "Larger bets result in a higher balanced bluff-to-value ratio, aka alpha. (e.g., 0.5x pot => 0.33 alpha, 1x pot => 0.5 alpha, 2x pot => 0.67 alpha). The limit of alpha as your bet size approaches infinity is 1. An intuitive explanation is that bigger bets give your opponent worse pot odds, so you need more bluffs to incentivize your opponent to call. Alternatively, larger bets allow your value hands support more bluffs."
     }
 ];
