@@ -5,7 +5,7 @@ const questions = [
         question: "You have a flush draw on the flop. Using the Rule of 4, what's your approximate equity?",
         options: ["32%", "36%", "39%", "42%"],
         correct: 1,
-        points: 2,
+        points: 5,
         explanation: "A flush draw has 9 outs (13 cards in suit minus 4 visible). Using Rule of 4 for flop: 9 × 4 = 36%. This quick estimation helps you rapidly calculate whether draws are profitable calls."
     },
     {
@@ -13,7 +13,7 @@ const questions = [
         question: "You have an open-ended straight draw on the turn. Using the Rule of 2, what's your approximate equity?",
         options: ["12%", "16%", "18%", "20%"],
         correct: 1,
-        points: 2,
+        points: 3,
         explanation: "Open-ended straight draws have 8 outs (4 cards on each end). On turn (1 card to come): 8 × 2 = 16%. Rule of 2 and 4 provides quick equity estimates without complex calculations."
     },
     {
@@ -29,7 +29,7 @@ const questions = [
         question: "Using the fraction trick, if you face a 2/3 pot bet, what are your pot odds?",
         options: ["2/5", "2/6", "2/7", "2/8"],
         correct: 2,
-        points: 3,
+        points: 2,
         explanation: "Fraction trick formula: When facing a/b pot bet, pot odds = a/(b+2a). For 2/3 pot: 2/(3+2×2) = 2/7 ≈ 28.6%. This mental shortcut is faster than full calculations."
     },
     {
@@ -45,7 +45,7 @@ const questions = [
         question: "What's the key insight about breakeven equity?",
         options: ["You need >50% equity to call", "You only need to beat your pot odds", "You need the nuts to call", "Equity doesn't matter on the river"],
         correct: 1,
-        points: 3,
+        points: 2,
         explanation: "The Breakeven Misconception: You don't need >50% equity to call profitably. You only need equity higher than your pot odds. If getting 3:1 (25%), winning 30% of the time is profitable!"
     },
     {
@@ -61,7 +61,7 @@ const questions = [
         question: "Which factor MOST improves your implied odds?",
         options: ["Shallow stacks", "Obvious draws", "Deep stacks", "Dry boards"],
         correct: 2,
-        points: 3,
+        points: 2,
         explanation: "Deep stacks allow you to win more money when you hit, significantly improving implied odds"
     },
     {
@@ -87,7 +87,7 @@ const questions = [
         question: "You have KQ on A♠7♦3♣ rainbow. Why is betting often a mistake here?",
         options: ["KQ is too weak", "You accomplish neither value nor bluff", "The board is too dry", "You're out of position"],
         correct: 1,
-        points: 3,
+        points: 5,
         explanation: "The Strength Paradox: Being 'fairly strong' isn't reason to bet. When you bet, worse hands (QJ, KT) fold and better hands (any ace, any pair) never fold. You accomplish neither value nor bluff - perfect check-back spot."
     },
     {
@@ -176,16 +176,8 @@ const questions = [
     },
     {
         category: "Position",
-        question: "What's the fundamental difference between checking IP vs OOP?",
-        options: ["IP checks are weaker", "IP sees next card immediately; OOP gives info without gaining any", "No significant difference", "OOP checks are stronger"],
-        correct: 1,
-        points: 3,
-        explanation: "IP checking sees the next card immediately, while OOP checking gives information without gaining any"
-    },
-    {
-        category: "Position",
         question: "When folded to, what is the primary reason that allows the Button to play much wider ranges than UTG?",
-        options: ["Button is lucky position", "Only needs to beat 2 players", "Gets better cards", "Has Postflop position"],
+        options: ["Button is a lucky position", "Only needs to beat 2 players", "Gets better cards", "Has Postflop position"],
         correct: 1,
         points: 2,
         explanation: "Button only has 2 players (blinds) left to act, while UTG faces N-1 players who could have strong hands"
@@ -205,6 +197,14 @@ const questions = [
         correct: 1,
         points: 3,
         explanation: "If you only check weak hands OOP, opponents can exploit your range by betting frequently when you check"
+    },
+    {
+        category: "Position",
+        question: "What's the fundamental difference between checking IP vs OOP?",
+        options: ["All of the below", "IP checks are generally weaker than OOP", "IP check immedaitely brings a free card; OOP might still face a bet", "OOP checks are generally stronger because it contains traps and check-raises."],
+        correct: 0,
+        points: 5,
+        explanation: "IP check immediately leads to a free card, whereas when OOP checks, they still have to face a potential bet. There's a few takeaways from this. Firstly, this means that IP can leave their checks less protected and rely on the free card to bolster their checking range. OOP gets no such luxury so they need to protect their checking range with some traps and check-raises. Consequently, when the free card is a brick, then OOP can often ramp up the pressure because IP check really is a strong sign of weakness. Secondly, IP is risking their free card when they bet since it allows a check-raise so you have to be careful when betting hands that would have to fold to a raise."
     },
     
     // Part 5: Balance & Exploits (20 points)
@@ -245,7 +245,7 @@ const questions = [
         question: "How do you exploit a 'Fit or Fold' player?",
         options: ["Only bet strong hands", "Increase c-bet frequency, consider smaller sizing", "Always bet large", "Never bluff"],
         correct: 1,
-        points: 3,
+        points: 4,
         explanation: "They fold to most c-bets when they miss, so increase frequency and potentially use smaller sizing"
     },
     {
@@ -253,7 +253,7 @@ const questions = [
         question: "Against a Maniac (plays >50% hands, constantly aggressive), how should you adjust?",
         options: ["Tighten up and call down with strong hands", "Match their aggression", "Fold everything", "Bluff more"],
         correct: 0,
-        points: 3,
+        points: 4,
         explanation: "Tighten preflop, pick hands you can call down with, and let them hang themselves with weak hands"
     },
     
@@ -263,16 +263,16 @@ const questions = [
         question: "What is 'alpha' in poker mathematics?",
         options: ["Your win rate", "Defender's calling frequency", "Bluff success rate", "The aggressor's risk-vs-reward ratio"],
         correct: 3,
-        points: 3,
-        explanation: "Alpha = Bet Size / (Pot + Bet Size), representing what % of time your bluff needs to work"
+        points: 2,
+        explanation: "Alpha = Bet Size / (Pot + Bet Size). This is the risk-vs-reward fraction and represents what % of time a your bluff needs to work (assuming the bluff always loses when called). By the way, you might then notice that a folding frequency of (1-alpha) makes these bluffs indifferent between bluffing and giving up :)"
     },
     {
         category: "Game Theory",
-        question: "You bet $100 into a $100 pot. What's your alpha?",
+        question: "You bet $100 into a $100 pot. What's is alpha for this bet size?",
         options: ["25%", "33%", "50%", "55%"],
         correct: 2,
-        points: 3,
-        explanation: "Alpha = 100/(100+100) = 100/200 = 50%"
+        points: 2,
+        explanation: "Alpha = 100/(100+100) = 100/200 = 50%. Alternatively using the alpha fraction trick (which is different from the pot odds fraction trick) an a/b bet => a/(a+b) => 1/2 alpha."
     },
     {
         category: "Game Theory",
@@ -295,7 +295,7 @@ const questions = [
         question: "What's the relationship between bet size and the balanced bluff-to-value ratio?",
         options: ["Larger bets need fewer bluffs", "No relationship", "Larger bets need more bluffs", "Only pot-sized bets work"],
         correct: 2,
-        points: 2,
+        points: 4,
         explanation: "Larger bets result in a higher balanced bluff-to-value ratio, aka alpha. (e.g., 0.5x pot => 0.33 alpha, 1x pot => 0.5 alpha, 2x pot => 0.67 alpha). The limit of alpha as your bet size approaches infinity is 1. An intuitive explanation is that bigger bets give your opponent worse pot odds, so you need more bluffs to incentivize your opponent to call. Alternatively, larger bets allow your value hands support more bluffs."
     }
 ];
