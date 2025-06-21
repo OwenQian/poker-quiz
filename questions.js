@@ -5,7 +5,7 @@ const questions = [
         question: "You have a flush draw on the flop. Using the Rule of 4, what's your approximate equity?",
         options: ["32%", "36%", "39%", "42%"],
         correct: 1,
-        points: 4,
+        points: 2,
         explanation: "A flush draw has 9 outs (13 cards in suit minus 4 visible). Using Rule of 4 for flop: 9 × 4 = 36%. This quick estimation helps you rapidly calculate whether draws are profitable calls."
     },
     {
@@ -13,7 +13,7 @@ const questions = [
         question: "You have an open-ended straight draw on the turn. Using the Rule of 2, what's your approximate equity?",
         options: ["12%", "16%", "18%", "20%"],
         correct: 1,
-        points: 3,
+        points: 2,
         explanation: "Open-ended straight draws have 8 outs (4 cards on each end). On turn (1 card to come): 8 × 2 = 16%. Rule of 2 and 4 provides quick equity estimates without complex calculations."
     },
     {
@@ -87,7 +87,7 @@ const questions = [
         question: "You have KQ on A♠7♦3♣ rainbow. Why is betting often a mistake here?",
         options: ["KQ is too weak", "You accomplish neither value nor bluff", "The board is too dry", "You're out of position"],
         correct: 1,
-        points: 3,
+        points: 2,
         explanation: "The Strength Paradox: Being 'fairly strong' isn't reason to bet. When you bet, worse hands (QJ, KT) fold and better hands (any ace, any pair) never fold. You accomplish neither value nor bluff - perfect check-back spot."
     },
     {
@@ -113,7 +113,7 @@ const questions = [
         question: "In the Four Categories Framework, what defines Category 1 hands?",
         options: ["Showdown value hands", "Drawing hands", "Strong enough to bet multiple streets for value", "Weak bluffing hands"],
         correct: 2,
-        points: 3,
+        points: 2,
         explanation: "Category 1 = Value hands strong enough to bet multiple streets (top pair strong kicker, two pair, sets)"
     },
     {
@@ -121,7 +121,7 @@ const questions = [
         question: "What makes a hand Category 3 (Bluffing Candidates)?",
         options: ["Pure air with no equity", "Strong hands for value", "Weak but with draw equity or blockers", "Marginal showdown value"],
         correct: 2,
-        points: 3,
+        points: 2,
         explanation: "Category 3 hands are currently weak but have properties making them good bluffs (draws, blockers)"
     },
     {
@@ -203,7 +203,7 @@ const questions = [
         question: "What's the fundamental difference between checking IP vs OOP?",
         options: ["All of the below", "IP checks are generally weaker than OOP", "IP check immedaitely brings a free card; OOP might still face a bet", "OOP checks are generally stronger because it contains traps and check-raises."],
         correct: 0,
-        points: 5,
+        points: 3,
         explanation: "IP check immediately leads to a free card, whereas when OOP checks, they still have to face a potential bet. There's a few takeaways from this. Firstly, this means that IP can leave their checks less protected and rely on the free card to bolster their checking range. OOP gets no such luxury so they need to protect their checking range with some traps and check-raises. Consequently, when the free card is a brick, then OOP can often ramp up the pressure because IP check really is a strong sign of weakness. Secondly, IP is risking their free card when they bet since it allows a check-raise so you have to be careful when betting hands that would have to fold to a raise."
     },
     
@@ -213,7 +213,7 @@ const questions = [
         question: "What's the most reliable way to identify player types?",
         options: ["Betting patterns", "Position play", "Watching showdowns", "Stack size"],
         correct: 2,
-        points: 3,
+        points: 2,
         explanation: "Showdowns reveal actual hand strength and are the most reliable information source"
     },
     {
@@ -263,7 +263,7 @@ const questions = [
         question: "What is 'alpha' in poker mathematics?",
         options: ["Your win rate", "Defender's calling frequency", "Bluff success rate", "The aggressor's risk-vs-reward ratio"],
         correct: 3,
-        points: 2,
+        points: 3,
         explanation: "Alpha = Bet Size / (Pot + Bet Size). This is the risk-vs-reward fraction and represents what % of time a your bluff needs to work (assuming the bluff always loses when called). By the way, you might then notice that a folding frequency of (1-alpha) makes these bluffs indifferent between bluffing and giving up :)"
     },
     {
@@ -279,7 +279,7 @@ const questions = [
         question: "When your bluff to value ratio equals alpha, what happens to your opponent's bluff catchers?",
         options: ["They must fold", "They become indifferent between calling and folding", "They must call", "They get confused"],
         correct: 1,
-        points: 4,
+        points: 3,
         explanation: "A bluff to value ratio of alpha makes your opponent's call-EV equal to fold-EV (indifferent)"
     },
     {
@@ -295,7 +295,7 @@ const questions = [
         question: "What's the relationship between bet size and the balanced bluff-to-value ratio?",
         options: ["Larger bets need fewer bluffs", "No relationship", "Larger bets need more bluffs", "Only pot-sized bets work"],
         correct: 2,
-        points: 4,
+        points: 3,
         explanation: "Larger bets result in a higher balanced bluff-to-value ratio, aka alpha. (e.g., 0.5x pot => 0.33 alpha, 1x pot => 0.5 alpha, 2x pot => 0.67 alpha). The limit of alpha as your bet size approaches infinity is 1. An intuitive explanation is that bigger bets give your opponent worse pot odds, so you need more bluffs to incentivize your opponent to call. Alternatively, larger bets allow your value hands support more bluffs."
     }
 ];
