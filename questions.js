@@ -5,7 +5,7 @@ const questions = [
         question: "You have a flush draw on the flop. Using the Rule of 4, what's your approximate equity?",
         options: ["32%", "36%", "39%", "42%"],
         correct: 1,
-        points: 5,
+        points: 4,
         explanation: "A flush draw has 9 outs (13 cards in suit minus 4 visible). Using Rule of 4 for flop: 9 × 4 = 36%. This quick estimation helps you rapidly calculate whether draws are profitable calls."
     },
     {
@@ -53,7 +53,7 @@ const questions = [
         question: "What are implied odds?",
         options: ["The odds from the current pot", "Future money you can win when you hit", "Your opponent's folding frequency", "The probability of making your hand"],
         correct: 1,
-        points: 3,
+        points: 2,
         explanation: "Implied odds = current pot odds + additional money you expect to win when you hit. They depend on opponent's hand strength, how disguised your draw is, and stack depth. Deep stacks = better implied odds."
     },
     {
@@ -66,11 +66,11 @@ const questions = [
     },
     {
         category: "Poker Math",
-        question: "You face a $50 bet into a pot of $100 with 20% equity. Using implied odds formula, how much extra do you need to win on the river when you hit to break even?",
+        question: "You face a $50 bet into a pot of $100 with 20% equity. The bet lays worse pot odds than your current equity. How much extra do you need win in the future (implied odds) to break even?",
         options: ["$10", "$12.50", "$25", "$50"],
         correct: 3,
-        points: 5,
-        explanation: "Formula: X = b × (1/E - 1/β) where b=bet, E=equity, β=pot odds. X = 50 × (1/0.2 - 1/0.25) = 50 × (5 - 4) = $50. You need $50 more in future betting to justify the call."
+        points: 4,
+        explanation: "The intuition is that there is a gap between your equity and pot odds so you need future bets to make up the difference. Formula: X = b × (1/E - 1/β) where b=bet, E=equity, β=pot odds. X = 50 × (1/0.2 - 1/0.25) = 50 × (5 - 4) = $50. You need $50 more in future betting to justify the call. An alternative way to calculate is that the required final pot (RFP) = b/E = $50/0.2 = $250. So after you call, the pot is $200, therefore you need to win an extra $50 bet in the future."
     },
     
     // Part 2: Betting Strategy (18 points)
@@ -87,7 +87,7 @@ const questions = [
         question: "You have KQ on A♠7♦3♣ rainbow. Why is betting often a mistake here?",
         options: ["KQ is too weak", "You accomplish neither value nor bluff", "The board is too dry", "You're out of position"],
         correct: 1,
-        points: 5,
+        points: 3,
         explanation: "The Strength Paradox: Being 'fairly strong' isn't reason to bet. When you bet, worse hands (QJ, KT) fold and better hands (any ace, any pair) never fold. You accomplish neither value nor bluff - perfect check-back spot."
     },
     {
